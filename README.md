@@ -1,4 +1,3 @@
-# Small_Projects
 
-<div>Python Calculator with GUI</div>
-Python Calculator with PyQt6
+# Python Calculator with GUI
+ Python Calculator with PyQt6

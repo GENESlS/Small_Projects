@@ -1,6 +1,6 @@
 
 # Python Calculator with GUI
- Python Calculator with PyQt6
+ PyQt6
 
 # Clappy Bird 
  Unity

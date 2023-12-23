@@ -23,8 +23,8 @@ board = [
     ["wRook", "wKnight", "wBishop", "wQueen", "wKing", "wBishop", "wKnight", "wRook"],
 ]
 
-kingW = [0,4]
-kingB = [7,4]
+kingW = [7,4]
+kingB = [0,4]
 
 check = False
 end = 0                   #   0 -- Game Continues   1 -- White Wins   2 -- Black Wins 
@@ -159,6 +159,7 @@ def validate_king_move(piece, start_row, start_col, end_row, end_col, target_pie
     valid1 = (row_distance <= 1) and (col_distance <= 1)
     valid2 = False
     
+    # Can't get close to enemy king
     if (valid1):
         if (turn == "w"):
             for x in [-1, 0, 1]:
@@ -176,26 +177,26 @@ def validate_king_move(piece, start_row, start_col, end_row, end_col, target_pie
                         kingB[0] = end_row
                         kingB[1] = end_col            
     
-    print ("valid1: "+str(valid1)+" valid2: "+str(valid2)+" isCheck:"+str(is_check(piece, end_row, end_col)))
-    return valid1 and valid2 and (is_check(piece, end_row, end_col) != True)
+    # print ("valid1: "+str(valid1)+" valid2: "+str(valid2)+" isCheck:"+str(is_check_zone(piece, end_row, end_col)))
+    return valid1 and valid2 and (is_check_zone(piece, end_row, end_col) != True)
 
 
 def piece_in_path(start_row, start_col, end_row, end_col):
-    global kingB, kingW, check
+    global kingB, kingW, check, turn
     
     row_direction = 1 if end_row > start_row else -1 if end_row < start_row else 0
     col_direction = 1 if end_col > start_col else -1 if end_col < start_col else 0
     row, col = start_row + row_direction, start_col + col_direction
     while row != end_row or col != end_col:
         if get_piece(row, col):
-            if (get_piece(row, col) == get_piece(row, col)[0] + "King"):
+            if (get_piece(row, col)[0] != turn and ("King" in get_piece(row, col)[0])):
                 check = True
             return True
         row += row_direction
         col += col_direction
     return False
 
-def is_check(piece, end_row, end_col):
+def is_check_zone(piece, end_row, end_col):
     
     '''row_direction = 1 if end_row > start_row else -1 if end_row < start_row else 0
     col_direction = 1 if end_col > start_col else -1 if end_col < start_col else 0
@@ -208,33 +209,99 @@ def is_check(piece, end_row, end_col):
         row += row_direction
         col += col_direction'''
     
+    # Checking Diagonals
     One = False
     Two = False
     Three = False
     Four = False
     
-    for x in [-1, 1, -2, 2, -3, 3, -4, 4, -5, 5, -6, 6, 7, -7]:
-        if (get_piece(end_row+x, end_col) and (get_piece(end_row+x, end_col)[0] != piece[0])):
-            if ("Ro" or "Qu" in get_piece(end_row+x, end_col)):
-                print (get_piece(end_row+x, end_col))
-                One = True
-        for y in [-1, 1, -2, 2, -3, 3, -4, 4, -5, 5, -6, 6, 7, -7]:
-            if (get_piece(end_row, end_col+y) and (get_piece(end_row, end_col+y)[0] != piece[0])):
-                if ("Ro" or "Qu" in get_piece(end_row, end_col+y)):
-                    print (get_piece(end_row, end_col+y))
-                    Two = True
-            elif (get_piece(end_row+x, end_col+y) and (get_piece(end_row+x, end_col+y)[0] != piece[0])):
-                if ("Bis" or "Qu" in get_piece(end_row+x, end_col+y)):
-                    print (get_piece(end_row+x, end_col+y))
-                    Three = True
+    # Locks for finding only the first stone in the diagonal
+    c1 = False
+    c2 = False
+    c3 = False
+    c4 = False
+    c5 = False
+    c6 = False
+    c7 = False
+    c8 = False
+    
+    for x in [1, 2, 3, 4, 5, 6, 7]:
+        
+        # print ("x= "+str(x))
+        
+        # Checking all diagonals for enemy threats
+        if (get_piece(end_row+x, end_col) != "" and c1 == False) :
+            c1 = True
+            if (get_piece(end_row+x, end_col)[0] != piece[0]):
+                if (("Rook" in get_piece(end_row+x, end_col)) or ("Queen" in get_piece(end_row+x, end_col))):
+                    print (get_piece(end_row+x, end_col))
+                    One = True
+        
+        if (get_piece(end_row-x, end_col) != "" and c2 == False) :
+            c2 = True
+            if (get_piece(end_row-x, end_col)[0] != piece[0]):
+                if (("Rook" in get_piece(end_row-x, end_col)) or ("Queen" in get_piece(end_row-x, end_col))):
+                    print (get_piece(end_row-x, end_col))
+                    One = True
+            
+        for y in [1, 2, 3, 4, 5, 6, 7]:
+            
+            # print ("y= "+str(y))
+            
+            if (get_piece(end_row, end_col+y) != "" and c3 == False):
+                c3 = True
+                if ((get_piece(end_row, end_col+y)[0] != piece[0])):
+                    if (("Rook" in get_piece(end_row, end_col+y)) or ("Queen" in get_piece(end_row, end_col+y))):
+                        print (get_piece(end_row, end_col+y))
+                        Two = True
+                
+            if (get_piece(end_row, end_col-y) != "" and c4 == False):
+                c4 = True
+                if ((get_piece(end_row, end_col-y)[0] != piece[0])):
+                    if (("Rook" in get_piece(end_row, end_col-y)) or ("Queen" in get_piece(end_row, end_col-y))):
+                        print (get_piece(end_row, end_col-y))
+                        Two = True
+            
+            if (abs(x) == abs(y)):
+                    if (get_piece(end_row+x, end_col+y) != "" and c5 == False):
+                        c5 = True
+                        if (get_piece(end_row+x, end_col+y)[0] != piece[0]):
+                            if (("Bishop" in get_piece(end_row+x, end_col+y)) or ("Queen" in get_piece(end_row+x, end_col+y))):
+                                print (get_piece(end_row+x, end_col+y))
+                                Three = True
+                
+                    if (get_piece(end_row+x, end_col-y) != "" and c6 == False):
+                        c6 = True
+                        if (get_piece(end_row+x, end_col-y)[0] != piece[0]):
+                            if (("Bishop" in get_piece(end_row+x, end_col-y)) or ("Queen" in get_piece(end_row+x, end_col-y))):
+                                print (get_piece(end_row+x, end_col-y))
+                                Three = True
+            
+                    if (get_piece(end_row-x, end_col-y) != "" and c7 == False):
+                        c7 = True
+                        if (get_piece(end_row-x, end_col-y)[0] != piece[0]):
+                            if (("Bishop" in get_piece(end_row-x, end_col-y)) or ("Queen" in get_piece(end_row-x, end_col-y))):
+                                print (get_piece(end_row-x, end_col-y))
+                                Three = True
+            
+                    if (get_piece(end_row-x, end_col+y) != "" and c8 == False):
+                        c8 = True
+                        if (get_piece(end_row-x, end_col+y)[0] != piece[0]):
+                            if (("Bishop" in get_piece(end_row-x, end_col+y)) or ("Queen" in get_piece(end_row-x, end_col+y))):
+                                print (get_piece(end_row-x, end_col+y))
+                                Three = True
     
     for c in [-1, 1]:
         for d in [-1, 1]:
-            if (get_piece(end_row+c, end_col+d) and (get_piece(end_row+c, end_col+d)[0] != piece[0]) and ("Pa" in get_piece(end_row+c, end_col+d))):
-                print (get_piece(end_row+c, end_col+d))
-                Four = True
+            if (get_piece(end_row+c, end_col+d) != "" and (get_piece(end_row+c, end_col+d)[0] != piece[0]) and ("Pawn" in get_piece(end_row+c, end_col+d))):
+                if (c<0 and get_piece(end_row+c, end_col+d)[0] == "b"):
+                    print (get_piece(end_row+c, end_col+d))
+                    Four = True
+                elif (c>0 and get_piece(end_row+c, end_col+d)[0] == "w"):
+                    print (get_piece(end_row+c, end_col+d))
+                    Four = True
     
-    print (str(One)+" "+str(Two)+" "+str(Three)+" "+str(Four))
+    # print (str(One)+" "+str(Two)+" "+str(Three)+" "+str(Four))
     return One or Two or Three or Four
 
 def move_piece(start_row, start_col, end_row, end_col):
@@ -266,6 +333,7 @@ def check_game_over():
     global check, turn, kingW, kingB, end
     c = False
     
+    # Can king move?
     if (check):
         if (turn == "w"):
             for x in [-1, 0, 1]:

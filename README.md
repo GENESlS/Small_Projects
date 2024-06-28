@@ -1,9 +1,10 @@
 
 # Python Calculator with GUI
- PyQt6
+ Made with PyQt6
 
 # Clappy Bird 
- Unity
+ Made in Unity
 
 # Python Chess
-Pygame and Tkinter
+Made with Pygame and Tkinter
+-not yet fully functional, only interactable chess table

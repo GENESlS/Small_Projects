@@ -84,6 +84,11 @@ public class BirdController : MonoBehaviour
         {
             playerScore++;
         }
+        if (other.tag == "Ground")
+        {
+            Debug.Log("Bird collided with: " + other.tag);
+            isGameOver = true;
+        }
         /* if (other.tag == "Background")
         {
             Debug.Log("Bird collided with: " + other.tag);

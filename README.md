@@ -3,7 +3,7 @@
  Made with PyQt6
 
 # Clappy Bird 
- Made in Unity
+ Made in Unity, Another Flappy Bird Clone
 
 # Python Chess
 Made with Pygame and Tkinter

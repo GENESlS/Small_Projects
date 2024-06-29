@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ScoreZone
   - DeathZone
+  - Background
   layers:
   - Default
   - TransparentFX

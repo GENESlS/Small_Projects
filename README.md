@@ -8,3 +8,7 @@
 # Python Chess
 Made with Pygame and Tkinter
 -not yet fully functional, only interactable chess table
+
+# Python Web Scraper
+Simple Web Scraper for prayer times (for educational&test purposes only)
+2 versions, 1 require proxy server
